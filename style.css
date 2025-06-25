@@ -104,3 +104,12 @@ code {
 #aboutme {
   padding: 20px;
 }
+
+.yt-vid {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.mosaic {
+  padding-top: 5vh;
+}
