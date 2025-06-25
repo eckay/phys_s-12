@@ -23,7 +23,7 @@ a {
 }
 
 nav {
-  background-color: #dcdcdc;
+  background-color: #7ae2de;
   color: #EEE7E8;
   padding: 50px 0px;
 }
@@ -41,19 +41,13 @@ nav {
 }
 
 .nav-link {
-  border: 3px outset #a3a3a3;
-  border-radius: 20px;
   padding: 10px 30px;
-  background-color: #a3a3a3;
   color: #EEE7E8;
   transition: 0.3s;
 }
 
 .nav-link:hover {
-  border: 3px outset #FFFFFF;
-  border-radius: 20px;
-  padding: 10px 30px;
-  background-color: #a3a3a3;
+  color: #ffffff;
   transition: 0.3s;
 }
 
@@ -110,6 +104,21 @@ code {
   aspect-ratio: 16 / 9;
 }
 
+#about-heading {
+  text-align: center;
+  padding-top: 1vh;
+}
+
 .mosaic {
-  padding-top: 5vh;
+  padding-top: 2vh;
+  padding-bottom: 0vh;
+}
+
+.mosaic img {
+  border: 2px solid #000000;
+  border-radius: 10px;
+}
+
+.mosaic .row {
+  padding-top: 2vh;
 }
