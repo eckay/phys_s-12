@@ -22,7 +22,7 @@ a {
   /*padding-bottom: 70px;*/
 }
 
-/* bootstrap navbar and i are battling but i'll do that some other time*/
+/* bootstrap navbar and i are battling but i'll deal with that some other time */
 
 nav {
   background-color: #7ae2de;
@@ -45,6 +45,7 @@ nav {
 .nav-link {
   padding: 10px 30px;
   color: #ffffff;
+  opacity: 1;
   transition: 0.3s;
 }
 
@@ -101,36 +102,39 @@ code {
   padding: 20px;
 }
 
-.yt-vid {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-}
+/* mine */
 
-#about-heading {
-  text-align: center;
-  padding-top: 1vh;
-}
-
+/* main page */
 .mosaic {
   padding-top: 2vh;
   padding-bottom: 0vh;
 }
 
 .mosaic img {
-  border: 2px solid #000000;
+  border: 3px solid #c54c3f;
   border-radius: 10px;
+}
+
+.mosaic a {
+  color: #e05547;
 }
 
 .mosaic .col-sm-4 {
   padding-top: 2vh;
 }
 
+/* week 1*/
 .idea-select + .btn-outline-primary {
     background-color: white;
     border-color: #e05547;
     color: #e05547;
     border-radius: 0px;
     border-bottom: none;
+}
+
+.yt-vid {
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
 
 .idea-select:checked + .btn-outline-primary {
@@ -142,4 +146,19 @@ code {
 #project-idea {
   border: 5px solid #e05547;
   padding: 2vh;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
+
+/* about me */
+#about-me-img {
+  border: 3px solid #c54c3f;
+  border-radius: 10px;
+}
+
+#about-heading {
+  text-align: center;
+  padding-top: 1vh;
+}
+/* i should probably separate these out at some point :( */

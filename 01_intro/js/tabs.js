@@ -1,36 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<title>Phys S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-light">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">Week 1: Final Project Proposal(s)</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
-
-<body>
-<xmp style="display:none;">
-<div class="container">
-
-  <p class = "margin"></p>
-
-  <input type="radio" class="btn-check idea-select" name="options" id="automaton" value="automaton" autocomplete="off" onclick="changeIdea()" checked>
-  <label class="btn btn-outline-primary" for="automaton">Idea 1: Drawing automaton</label>
-        
-  <input type="radio" class="btn-check idea-select" name="options" id="cat-toy" value="cat-toy" autocomplete="off" onclick="changeIdea()">
-  <label class="btn btn-outline-primary" for="cat-toy">Idea 2: Automated cat toy</label>
-
-  <div id="project-idea">
+function changeIdea() {
+    let selectedButton = [...document.querySelectorAll('.idea-select:checked')].map((d) => d.id)[0];
+    let selectIdea = document.getElementById("project-idea");
+    if (selectedButton === "automaton") {
+      selectIdea.innerHTML = `
     <p class = "margin">
       I think the combination of sort-of-weird doll parts and machinery would make a drawing automaton fun to build. The old ones I've seen use cams to store data, 
       but because of the requirements for the final project, I'd be interested in trying to make one that would be programmable using a computer rather than cams. Ideally, I'd like 
@@ -47,17 +19,23 @@
       <div class="col-md-4">
         <iframe class="yt-vid" src="https://www.youtube-nocookie.com/embed/FQM9JzHbCdw?si=qp1XXILfXFT0IPli" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
+    </div>`;
+    }
+    else {
+      selectIdea.innerHTML = `
+  <p class = "margin">
+    My second idea is a sort of arm that could be attached to our cat's favorite toy (which looks like a fishing rod) and
+    move it vertically and horizontally in a variety of patterns. He's a somewhat large cat (17 lbs), so it would have to be able
+    to withstand a decent amount of pulling in addition to not pulling too hard on the toy itself. Ideally, the cat would be able to 
+    activate it on his own (maybe by stepping on a button?). 
+  </p>
+  <div class="row">
+    <div class="col-md-6 d-flex justify-content-center">
+      <img width="80%" src="cat.jpg">
     </div>
-  </div>
-
-</div>
-</xmp>
-</body>
-
-<script src="js/tabs.js">
-  
-</script>
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
-
-</html>
+    <div class="col-md-6 d-flex justify-content-center">
+      <img width="80%" src="toy-idea.jpg">
+    </div>
+  </div>`;
+    }
+  }
