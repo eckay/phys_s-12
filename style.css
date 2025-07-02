@@ -161,4 +161,8 @@ code {
   text-align: center;
   padding-top: 1vh;
 }
+
+h4 {
+  font-weight: 600;
+}
 /* i should probably separate these out at some point :( */
