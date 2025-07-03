@@ -33,8 +33,8 @@
     <p>For the finger-jointed box, I added some holes for handles and my initials to the basic tutorial design 
     (initials were scored instead of engraved because I didn't want to wait forever). I'd never used a laser 
     cutter before, so I wanted to do something simple to start with. After struggling with Rhino for too long 
-    (I could not figure out how to rotate my box sketch correctly), I got my box cut. Unfortunately, I had no 
-    idea what to set the kerf parameter to, and the value I randomly picked based on cursory googling (0.3 mm) 
+    (I could not figure out how to rotate my box sketch correctly), I got my box cut. I had no 
+    idea what to set the kerf parameter to, and unfortunately the value I randomly picked based on cursory googling (0.3 mm) 
     was definitely too large because the fit is too snug for the cardboard to slot together happily. </p>
   </div>
 </div>
@@ -48,20 +48,21 @@
 </div>
 <div class="row">
   <div class="col">
-    <p>Because of the tight fit, the bottom fingers hold really nicely, but the tops ones required too much effort to
-    get in place. I ended up smooshing them while trying to slot them together, so now they're too floppy to be 
-    functional. If I decide to try cutting it again, I'll slightly reduce the kerf.</p>
+    <p>Because of the tight fit, the bottom fingers fit together really nicely, but the tops ones required too much effort to
+    get in place. I ended up smooshing them while trying to slot them in, so now they're too floppy to be 100% 
+    functional. If I were to try cutting it again, I'd slightly reduce the kerf, but the box stays together well 
+    enough to hold weight while I carry it around so it feels like a waste to recut it.</p>
   </div>
 </div>
 
 <br>
 <div class="row">
   <div class="col">
-    <h4>Fusion 360 Tutorial <a href="./week-2-tutorials.zip" download>(download zip of f3ds)</a></h4>
+    <h4>Fusion 360 Tutorial <a href="./week-2-tutorials.zip" download>(download f3d zip)</a></h4>
     <p>
       For this part of the assignment, I did the first few <a href="https://www.youtube.com/watch?v=d3qGQ2utl2A&t=38s">"Fusion 360 in 30 Days for Complete Beginners"</a> videos 
-      linked from the class site. Key points from the videos were 1) canvas: trace an image, 2) sweep tool: makes solid 
-      from 2d profile that follows a sketch path, 3) loft: connects sketch profiles in order of connection and uses guide
+      linked from the class site. Key points from the videos were (1) canvas: trace an image, (2) sweep tool: makes solid 
+      from 2d profile that follows a sketch path, (3) loft: connects sketch profiles in order of connection and uses guide
       rails to add more specificity. Here're some pics of models from the tutorials:
     </p>
   </div>
@@ -83,7 +84,7 @@
 <br>
 <div class="row">
   <div class="col">
-    <h4>Modeling Household Objects in Fusion <a href="./cat toy v3.f3d" download>(download zip of f3ds)</a></h4>
+    <h4>Modeling Household Objects in Fusion <a href="./cat toy v3.f3d" download>(download f3d zip)</a></h4>
     <p>
       The first object I chose is my cat's favorite toy. It seemed like a good starting point because I was 
       considering using it in a final project idea and because it's mostly cylindrical forms. It's built using 
@@ -107,11 +108,10 @@
 <div class="row">
   <div class="col">
     <p>
-      For my object made from multiple components, I modeled a pair of kitchen scissors, following the first part of
-      <a href="https://www.youtube.com/watch?v=z078TEfmvJM">this tutorial</a>. I traced over a canvas of the blade 
-      and handle to get the basic shapes down, then extruded various faces to make the body. I used the plane along 
-      path tool to take a notch out of the metal for the blade and combine to take a chunk out of the plastic handle 
-      where the metal blade sits. This time I actually set up my parameters first, which ended up being very necessary
+      For the object made from multiple components, I modeled a pair of kitchen scissors. I traced over a canvas of
+       the blade and handle to get the basic shapes down, then extruded various faces to make the body. When I couldn't 
+      figure out how to make the blade, I found <a href="https://www.youtube.com/watch?v=z078TEfmvJM">this video</a>,
+      which taught me about the plane along path tool. This time I actually set up my parameters first, which ended up being very necessary
       when I put the scissors together to discover they did not match up correctly and realized I'd forgotten to add 
       one measurement to the height of an extrusion. I also learned the importance of selecting paste new if I'm 
       planning to make edits to a copy of a component. I followed <a href="https://www.youtube.com/watch?v=1fw6kvTei1M">this tutorial</a>
@@ -119,7 +119,7 @@
     </p>
   </div>
 </div>
-<div class="row">
+<div class="row" style="padding-bottom: 4vh;">
   <div class="col">
     <img width="100%" src="img/scissors-cut.gif">
   </div>
