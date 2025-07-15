@@ -119,7 +119,7 @@
         of the largest gear took and using half that time to estimate half the rotation. 
       </p>
       <p>
-        The program tracks whether the flower is open or closed. If bright light hits the photoresistor while the flower's
+        The program tracks whether the flower is closed with flower_state and whether the motor is running with motor_state. If bright light hits the photoresistor while the flower's
         closed, the flower opens, and vice versa. Because it can't set position and has to rely on timing to estimate where
         the flower is in its cycle, once the motor starts running it can't switch from opening to closing until the full 
         half rotation has run. Here's the loop() code and the flower responding to light:
