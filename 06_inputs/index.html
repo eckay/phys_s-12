@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<title>PS70: Intro to Digital Fabrication </title>
+<head>
+<title>Phys S-12: Intro to Digital Fabrication </title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> 
+</head>
 
 
+<body>
 <nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
-      <h2 class="nav-title">PS70 Fall 2024</h2>
+      <h2 class="nav-title">Phys S-12 Summer 2025</h2>
     </div>
     <div class="navbar-nav">
       <h4><a class="nav-link" href="../index.html">Home</a></h4>
@@ -18,16 +24,123 @@
   </div>
 </nav>
 
-<body>
+
 <xmp style="display:none;">
-<div class="textcontainer">
-<p class="margin">   </p>
+<div class="container">
+  <p class="margin">   </p>
 
-<h3>Week 6: Electronic Inputs</h3>
+  <h3>Week 6: Input Devices</h3>
 
-<h4>Assignment 1: Capactive Sensor<h4>
+  <p class="margin">   </p>
 
-<h4>Assignment 2: [Use + Calibrate Another Sensor]</h4>
+  <div class="row">
+    <div class="col">
+      <h4>Use a sensor to measure a physical quantity (phototransistor)</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p>
+        I decided on a phototransistor because I used a photoresistor a couple weeks ago and wanted to play around with the other type of light sensor. I forgot that I don't have access to a luxmeter, so I ended up trying to calibrate it by placing my phone's flashlight a set distance (width of a duct tape roll) above the phototransistor and using a level of flashlight brightness to as a proxy. To try to add more than four values, I stuck two gels (R05, with 80% transmission, and R349, with 11% transmission) in between the phone flashlight and the phototransistor. My general idea was that R05, for example, would transmit .8 * 4 = 3.2 units of light when placed in front of the flashlight fully on (a bit janky).  
+      </p>
+      <p>
+        After several unsuccessful trials thrown off by changes in ambient light levels from clouds moving around, I holed up in a closet to try to keep light more steady, which also had the advantage of setting the output when no light was on to 0. As seen in the photo, I set up the circuit with a voltage divider with a 1k ohm resistor to get useable readings from the analog pin. They ranged from 4095 (maximum possible) when the LED was touching the phototransistor to 0 when it was more than 5 cm away. 
+      </p>
+
+    </div>
+    <div class="col">
+      <img width="100%" src="img/phototransistor.jpg">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <img width="100%" src="img/phototransistor_table.jpg">
+    </div>
+    <div class="col">
+      <p>
+        While testing the gels, I realized that the setup was not working as intended. My theory was that 1) the iPhone flashlight light levels are not evenly spaced and 2) the spectral energy distribution for the iPhone flashlight is not close to the spectral energy distribution for an incandescent, so the gels' transmission would be different (which is definitely true). I found iPhone flashlight SED curves in <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9674527/">this article</a>  and got gel SED curves <a href="https://us.rosco.com/en/mycolor">from Rosco</a>. The transmission peaks for R349 and the peak wavelengths from the iPhone flashlight overlap at several intervals, so the total transmission is probably more like 50% (source: eyeballing it). At this point I realized I was not going to able to calibrate this thing with more than four light values because I'd have to estimate most of those values and gave up on something more complex. I tried switching to changing the light's distance from the phototransistor, but it couldn't pick up the flashlight from far enough away to get many more values to calibrate with. 
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p>
+        Interestingly, the second level of brightness is 2.32-2.35 times as bright as the first level across all three setups (no gel, R349, R05). The third level is 3.58-3.64 times the first, and the fourth 5.16-5.34 times the first. That consistency suggests that the precision of the phototransistor is pretty good across different spectra. 
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h4>Accidentally making a resistive sensor instead of a capacitive sensor</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <img width="100%" src="img/velostat.jpg">
+    </div>
+    <div class="col">
+      <p>
+        I'm thinking about having a pressure sensor in my final project, so I wanted to get some experience using velostat. I saw part way through that we were supposed to be making specifically capacitive sensors, but I ended up trying the velostat anyway because I might need to use it. I sandwiched a square of velostat between two rectangles of copper tape and taped it all flat. To calibrate it, I used pennies as weights and added one at a time, up to ten total, taking them off in between and letting the readings return to its zero. The zero value for the sensor was between 0.14 and 17.77 (it changed between the two tests I did, I think because I had a loose connection and something moved around), and the maximum value it read was 4095, when I pressed on it with a finger. The values in the table are the average of the first five seconds after the pennies were placed on the sensor, measured every 200 ms.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p>
+        Just looking at those inital few seconds after placing the pennies down, the relationship between number of pennies and the output value from the sensor is quite linear. The green points are the first table and the blues ones the second. I think the dip between pennies 5 and 6 in the second table is from my loose connection issue (wish I could solder at home). I noticed that the sensor output slowly climbed the longer the pennies were left on the velostat, which is why I took the pennies off in between. I don't think that will be a huge issue for my intended velostat use. My bigger concerns are that the sensor output seems pretty dependent on where on the velostat the pressure is applied and that it's imprecise, even accounting for the changed zero. It'll be interesting to see how it behaves with a larger sheet of velostat.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <img width="100%" src="img/velostat_table_2.jpg">
+    </div>
+    <div class="col-sm-6">
+      <img width="100%" src="img/velostat_graph.png">
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col">
+      <h4>Capacitive sensor</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p>
+        The capacitive sensor I made is also a toy version of something I'm thinking of using for my project. I'm still figuring out the details of how movement will work, but it could be useful to have a distance/position sensor for the pencil. If I can figure out how to get consistent and defined value ranges from the distance sensor, I could have one each for x- and y-axis movement and get an approximate coordinate for the pencil. 
+      </p>
+      <p>
+        I stuck a strip of copper tape to one edge of a piece of plywood and just taped the wire to the analog pin to it (which was a bad idea because it shifted around too much). I wrapped the second strip around the pencil and connected that to the transmission pin. To calibrate it, I used the serial plotter to check the maximum and minumum values at each line of distance on the paper (the overall maximum was ~14500, and it went to zero at about three times the length of the board away). The signal was VERY unstable, so I think adding those optional stabilizing resistors will be necesary if I want to actually use a sensor like this in my project. Once I had the ranges, I modified the capacitive sensor handout code to average the sensor output of each second of readings, taken every 40 ms, in hopes of getting a value that would probably be in the middle of each range. Then that value gets sent to a big set of conditionals to return the line number corresponding to the range the value falls in. The modified Arduino code is <a href="img/capacitive_sensor.ino" download="">here</a>, and the table of ranges is below. 
+      </p>
+    </div>
+    <div class="col-sm-5">
+      <img width="100%" src="img/distance_sensor.jpg">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <img width="100%" src="img/distance_table.jpg">
+    </div>
+    <div class="col">
+      <p>
+        The sensor output changed quite a lot depending on the pencil angle, but that shouldn't be an issue for my project because I plan for the pencil to be at a fixed angle. For calibration, I tried my best to keep it vertical. When I tested out the calibration, it was shockingly accurate (87.5%) for the first nine distances I tested. After that, the ranges seemed to slide up by a couple hundred, which meant a lot of distances would read as one mark lower than they should. Over the 20 measurements I took, 11 were correct, which is definitely better than random but not ideal. The initial accuracy and the fact that most (7/9) of the incorrect readings showed the next mark over gives me hope that this setup could work well with some modifications and more time dedicated to calibrating the ranges.  
+      </p>
+    </div>
+  </div>
+
+  <br>
 
 </div>
 </xmp>
