@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PS70: Intro to Digital Fabrication </title>
+<title>Phys S-12: Intro to Digital Fabrication</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> 
 
 
 <nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
-      <h2 class="nav-title">PS70 Fall 2024</h2>
+      <h2 class="nav-title">Phys S-12 Summer 2025</h2>
     </div>
     <div class="navbar-nav">
       <h4><a class="nav-link" href="../index.html">Home</a></h4>
@@ -27,7 +31,90 @@
 
 
 
-<h4>Assignment: Minimum Viable Product for Final Project</h4>
+<h4>Minimum Viable Product for Final Project (<a href="files/week_07_arm_parts.f3z" download>fusion project</a>) (<a href="files/servo_movement.ino" download>arduino code</a>)</h4>
+
+<div class="row">
+  <div class="col">
+      <p> I started this week's assignment by trying read up on the best way to control the position of the drawing arm's tip based on my original idea of how I wanted the arm to work. This mostly involved skimming papers about the end-effectors of linkages I didn't understand. Eventually I realized I wasn't getting anywhere fast with my zero knowledge of mechanical engineering and decided to just try something out and see how it went.
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+      <p>I went with a design I could actually fully picture in my head, which meant sticking a micro servo on the arm of another micro servo for movements in the xy-plane and another above to control z-axis movement. Having embraced a calculation-free approach, I was a bit concerned that y-axis servo would struggle to move the x-axis servo, but so far it's worked. I wasn't entirely sure how I wanted the various parts arranged, so I 3D printed the moving parts and hacked apart a cardboard box to try out different ways of holding them. It took three prints to find an angle on the bed that would produce more-or-less accurate sizing for some parts; I kept getting pieces that wouldn't match despite being made from the same mesh, and I broke the mount piece for holding the x servo to the y servo (below) twice while removing supports. 
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <img width="100%" src="files/box_view.jpg">
+  </div>
+  <div class="col-6">
+    <img width="100%" src="files/annoying_part.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+      <p> Once assembled, I used writeMicroseconds() from ESP32Servo to get a smoother movement from the servos. Each servo is an instance of the AxisServo class with defined limits for its motion. In the video on the left, you can see it moving through a sweep of its x- and y- axis movements. I implemented z-axis movement by tying a thread to the forearm segment near the elbow and running it up and over the top of the box to a third servo. On the right is movement of all three servos at once. 
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+      <iframe width="400" height="225" src="https://www.youtube.com/embed/9mHA1c92h_Y?si=qV_8fl7aEMJ7Wz3g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+  <div class="col-6">
+    <iframe width="400" height="225" src="https://www.youtube.com/embed/uo85qAm2Olw?si=MbeuIslDeVOqKbek" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+      <p> The velostat pressure sensor was the bane of my existence this week. After using it during the input assignment, I knew it would be finicky, but I was not prepared to be totally baffled by what was happening with it. It wouldn't output values other than 0 (connected with velostat resistor in the middle) and 4095 (connected with no resistor) unless my fingers were touching the wires. I swapped out the voltage divider resistor, changed pins, rearranged my mess of wires, and checked connections, but I could not figure out why it wasn't responding to pressure correctly. After several hours of doing the same things, it just started working, which was confusing but also a relief.  
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+      <p> The pressure sensor sits under the drawing surface (in my photos it's the strip of cardboard totally covered in blue tape on the left). My overall hope for it is using it to control line weight, but this week its purpose has been to prevent the arm getting stuck against the horizontal surface. When the pressure sensor reads anything touching the surface, the arm's z-axis servo gets quickly kicked back to a position I know lifts the arm off the surface fully with the Backtrack() method. You can see it sort of working in this video; the abrupt upwards movement is the response to the pressure input. For my revised version of the sensor, I'll probably stick it under paper rather than cardboard because I had to add three weights (screwdriver bits) to the arm to get the tip of it to register.  
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+      <iframe width="400" height="225" src="https://www.youtube.com/embed/uo85qAm2Olw?si=l2nhZ4EGTO-y_5Ox" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+  <div class="col">
+      <pre><code>
+void Backtrack() {
+    if (millis() - prev_backtrack_ms > backtrack_interval) {
+      pos = 520; // Observed value
+      servo.writeMicroseconds(pos);
+      prev_ms = millis() + 100; // Pause before continuing forward
+      prev_backtrack_ms = millis();
+    }
+  }
+      </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+      <p> I think this prototype actually worked out OK as a proof of concept of the arm movement, which was my goal. For the final version, I plan to size it up slightly, in addition to necessary changes like making a frame to hold the pieces and determining how a writing implement will be held at the end of the arm (a millimeter is always smaller than I expect it to be). I also need to iterate on how the z-axis movement will work to make it smoother and to decide if the elbow joint should be loose/fall open or should require force from above to push it open. 
+      </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+  </div>
+</div>
 
 
 </div>
