@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PS70: Intro to Digital Fabrication </title>
+<title>Phys S-12: Intro to Digital Fabrication</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> 
 
 
 <nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
-      <h2 class="nav-title">PS70 Fall 2024</h2>
+      <h2 class="nav-title">Phys S-12 Summer 2025</h2>
     </div>
     <div class="navbar-nav">
       <h4><a class="nav-link" href="../index.html">Home</a></h4>
@@ -23,9 +27,90 @@
 <div class="textcontainer">
 <p class="margin">   </p>
 
-<h3>Week 8: CNC Milling</h3>
+<h3>Week 8: CNC Milling, Molding & Casting </h3>
 
-<h4>Assignment: Make Something With CNC</h4>
+
+<div class="row">
+  <div class="col">
+    <p>I want to make a little keychain charm in the shape of a cat, so for this week's assignment I worked with Stephen and Judy to do a test run with a simpler cat outline (<a href="files/joined_cat.stl" download>stl</a>).
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <img width="50%" src="files/cat_fusion.png">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <p>With Jess's help, we used the SRM-20 to cut a positive from modeling wax. In the interest of time, we selected the "faster cutting time" option rather than the "better surface finish" in SRP Player, which I regret because the tool path shows up very clearly in the casts while the finer detail (eyes, mouth) isn't visible. We used a 1/8" square end mill for roughing and a 1/16" round end mill for finishing. We marked the origin on our material, used VPanel to set the origin for the machine, and started cutting. Seeing the result made me realize that I didn't need to have drawn walls to contain the molding material because the SRM-20 cut out a rectangular pocket around our positive anyway (and the depth of that rectangle wasn't super important to us). Once we had our positive, we mixed up some 1:1 silicone to make the mold. It said it would take 3-5 hours to cure, so we left it overnight. 
+    </p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col text-center">
+    <img width="32%" src="files/srm20.JPG">
+    <img width="32%" src="files/wax_cat.JPG">
+    <img width="32%" src="files/silicone_cat.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>I wanted to try a cast with metal because I thought it would make the nicest charm. The toaster oven took about 13 minutes at pizza temperature to full melt the bismuth alloy, though some darker crunchy-looking bits floated on the melt and never melted. I poured in too much metal, so the cast outline is rounded on the back and has overflow around it. The metal also didn't want to flow into the narrower parts of the mold (ears and paws), so they didn't get filled in all the way and aren't as three-dimensional as they should be. I enlisted Judy's help for a second attempt. While I poured in the metal, Judy used a toothpick to push it into the paws and ears. The second cast didn't turn out perfectly (I poured too much again, and the back side of the cast is uneven from the toothpick), but the paws are much more distinct and there's less overflow around the edges. We made a third attempt but scraped up the back too much with the toothpick. I then discovered that in addition to having a low melting point, the bismuth alloy is very brittle (I discovered this by dropping casting attempt 3).
+    </p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col text-center">
+    <img width="80%" src="files/two_cats.PNG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>Following the adventure with metal, we put one of the metal casts in the smallest vacuum forming machine to make a mold to cast chocolate in. I brought it home, and the result is below. The chocolate was even more challenging for me to pour than the metal, and I ended up with even more overflow. Still tasty, though! 
+    </p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col text-center">
+    <img width="40%" src="files/vacuum_cat.JPG">
+    <img width="40%" src="files/chocolate_cat.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p> We also tried out the Drystone plaster. We used 2g of water and 10g of the powder. The bucket said we should use a 1,750 rpm motor to mix it, but we used such a small quantity that we figured it would be fine to just vigorously stir it by hand. It seems to have worked out. The plaster cast preserves mold detail better than the metal or chocolate, so the lines from the cutting tool are even more apparent in this cast. The grey smudges are from metal that remained stuck to the silicone mold after casting.
+    </p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col text-center">
+    <img width="60%" src="files/plaster_cat.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>The brittleness of the bismuth alloy has made me rethink using it for a keychain charm. I worry that keys banging against it might easily damage it, so now I'm considering an epoxy resin instead (less pretty but maybe more practical). The issue we had with casting materials overflowing has also made me think I should use a two-part mold for a cleaner cast. 
+    </p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col text-center">
+    <img width="60%" src="files/all_casts.JPG">
+  </div>
+</div>
 
 </div>
 </xmp>
