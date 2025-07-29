@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PS70: Intro to Digital Fabrication </title>
+<title>Phys S-12: Intro to Digital Fabrication</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> 
 
 
 <nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
-      <h2 class="nav-title">PS70 Fall 2024</h2>
+      <h2 class="nav-title">Phys S-12 Summer 2025</h2>
     </div>
     <div class="navbar-nav">
       <h4><a class="nav-link" href="../index.html">Home</a></h4>
@@ -26,17 +30,166 @@
 <h3>Week 9: Radio, WiFi, Bluetooth (IoT)</h3>
 
 
-<p class="margin">   </p>
-<div class="flexrow">
-  <a id="btn" href="wk9.zip" download>Download my files from this week!
-  </a>
+<div class="row">
+  <div class="col">
+    <h4>Piezo buzzer (<a href="code/buzzer_reduced.ino" download>download Arduino code</a>)</h4>
+    <p> My group tossed around a couple of ideas and tried two different ones (we wanted to try using Firebase in addition to WebSockets). The one I took the lead for plays eight notes on a piezo buzzer using a WebSocket to communicate locally between an ESP32 server and a client (my browser). On the breadboard, the piezo buzzer is hooked up to ground and an output pin. I used RandomNerd's WebSockets output tutorial (https://randomnerdtutorials.com/esp32-websocket-server-arduino/) and the stepper motor control code for the drawing machines for all the WebSockets-related code, so I only needed to write code to handle messages going back and forth. The Arduino C++ code has a big chunk of HTML and JS in the middle because it gets sent to the browser by the server. 
+    </p>
+  </div>
 </div>
-<p class="margin">   </p>
 
-<h4>Assignment: [Program something with IOT]</h4>
+<div class="row">
+  <div class="col text-center">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/X5SomTLooNg?si=MPXJ2hUnxpOeKgcs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+</div>
 
 
+<div class="row">
+  <div class="col">
+    <p>In the browser, you select a note from C4 to A5 for each of the eight select dropdowns on screen (with no sharps or flats because I ran out of time to add accidentals for them on the staff). I chose that range of notes because it's what covers the staff plus one line above and below. After clicking the play button, the browser uses the formatSend() function to send a JSON string with the contents of the form's select dropdowns to the server: 
+    </p>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col">
+    <pre><code>
+      function formatSend() {
+        const form = document.getElementById('notesForm');
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        websocket.send(JSON.stringify(data));
+      }
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>When the ESP32 receives the message, handleWebSocketMessage() parses the JSON, puts the sent frequencies into the notes[] array, and sets newRequest to true so the notes play in loop():
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+      void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
+        AwsFrameInfo *info = (AwsFrameInfo*)arg;
+        if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+          data[len] = 0;
+          
+          // this is from ArduinoJson docs (https://arduinojson.org/v7/example/parser/)
+          const char* json = (char*) data;
+          // Deserialize the JSON document
+          DeserializationError error = deserializeJson(doc, json);
+          // Test if parsing succeeds.
+          if (error) {
+              Serial.print(F("deserializeJson() failed: "));
+              Serial.println(error.f_str());
+              return;
+          }
+
+          // Put received notes into notes[] array (and make back into int which I did forget initially)
+          String key = "note";
+          for (int i = 0; i < n_notes; i++) {
+              notes[i] = doc[key + String(i)].as<int>();
+          }
+
+          // For if statement in loop()
+          newRequest = true;
+        }
+      }
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p> In loop(), a while loop iterates through all the frequencies in the notes[] array and uses Arduino's tone() function to play them on the buzzer (the list of frequencies I used for the notes came from the docs for tone()). It also uses the textAll() method to send the index of the currently playing note back to the browser.  
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+      void loop() {
+        if (newRequest) {
+          noTone(buzz_pin);
+          song_pos = 0;
+
+          // Play an annoying little tune. Blocked from new tune until it's done
+          while (song_pos < n_notes) {
+              current_ms = millis();
+              if (current_ms - prev_ms > duration_ms * 1.3) {
+                  ws.textAll(String(song_pos)); //<-- tell the browswer which note position it's on
+                  tone(buzz_pin, notes[song_pos], duration_ms);
+                  prev_ms = current_ms;
+                  song_pos++;
+              }
+          }
+        // Need a delay of duration before this goes out, done in the js
+          ws.textAll(String(-1));
+
+          newRequest = false;
+          ws.cleanupClients();
+        }
+      }
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p> Back in the browser, onMessage() handles visual feedback by setting the color of the currently playing circle to red. The delay between the tone actually playing and the note turning red is noticeable but not too bad. The final circle has a delay on becoming black again because it otherwise goes back to normal after receiving the song over message (-1), which occurs while the duration of the tone is still going.  
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+      function onMessage(event) {
+        // Visual feedback about currently playing note 
+        if (event.data == -1) { // <-- thank you loose equality :)
+          setTimeout(function() {
+            myNotes.syncColor(parseInt(event.data));
+        }, 500 * 1.3);
+        }
+        else {
+          myNotes.syncColor(parseInt(event.data));
+        }
+      }
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p> All the stuff involving the notes moving around uses D3.js because that's the only way I know how to make svgs respond to input even though I'm sure there's a simpler way. myNotes is a instance of a class that draws the staff and circles when it's created and has the syncColor method to change a circle's color when it gets called by the select dropdown changing. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p> I originally wanted to make a more polished interface and have multiple buzzers playing at once, but I ran out of time after spending too long troubleshooting my code. I had two different types of issue. In both the JS and the C++, I had type errors that happened because I forgot that the messages sent between the browser and the server are always strings (that's why there's a lot of parseInt() and String() stuff in it). The more confusing JS error I got was "SyntaxError: private names aren't valid in this context." I didn't get the error while I was using localhost to preview the JS, so something about getting the HTML/JS off the server must have caused it. I couldn't figure out what was causing the error so I ended up going section by section through to figure out where my issue was. It turned out to have two different causes. The first was trying to use Bootstrap, and the second was calling a class method using a different function. I'm still not sure why either of those caused that error, but with them removed the code finally worked. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>rbg LED</h4>
+    <p>Helena focused on using Firebase to control an RGB LED. She figured out how to get data from the database to the ESP32, but for whatever reason we could not get the LED to light up (code with the Firebase library takes 10 minutes to compile in Arduino IDE so it's unfortunately quite time consuming to dedug). We're still trying to troubleshoot it.  
+    </p>
+  </div>
+</div>
 
 </div>
 </xmp>
