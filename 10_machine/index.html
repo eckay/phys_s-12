@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PS70: Intro to Digital Fabrication </title>
+<title>PHYS S-12: Intro to Digital Fabrication </title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
 
@@ -9,7 +9,7 @@
 <nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
-      <h2 class="nav-title">PS70 Fall 2024</h2>
+      <h1 class="nav-title">PHYS S-12: Summer 2025</h1>
     </div>
     <div class="navbar-nav">
       <h4><a class="nav-link" href="../index.html">Home</a></h4>
@@ -23,11 +23,45 @@
 <div class="textcontainer">
 <p class="margin">   </p>
 
-<h3>Weeks 10-12: Machine Building</h3>
+<h3>Weeks 5.2-7: Machine Building</h3>
 
-<h4>Assignment: Build a Drawing Robot</h4>
-
-
+<h4>Assignment: Build a Drawing Robot (<a href="ek_mr-frosty.ino" download>download stepper code</a>)</h4>
+For this assignment, we (Leo, Emma, Nick, and Adrian) created a drawing robot that extruded frosting. The setup included 3 stepper motors, a syringe, a 3-D printed syringe holder, as well as various pre-given components that included a metal guide rail and 3-D printed holding components. Our largest challenges arose when trying to merge all 3 stepper motors to function in unison. First, when trying to calibrate the x-axis, the stepper motor would vibrate uncontrollably and cause the mechanism to not move along the x-axis. However, after debugging the issue, we learned that a pin we used (35) couldn't be used to drive the stepper--alleviating the issue. 
+<br> 
+<br>
+Afterwards, our next challenge was having the stepper motor drive the syringe in way that caused a constant extrusion of the frosting. Similar to the previous challenge, our stepper motor would also vibrate and not cause any rotation. However, we discovered the issue lay within the code itself, and not from the hardware. Therefore, we recoded the function which led to a constant torque being applied to the syringe. 
+<br>
+<br>
+Once we merged all of the code, we conducted a test-run to see how the drawing mechanism behaves when commanded to draw a circle or a horizontal or vertical line. Our machine works by sending arrays of x and y coordinates to the ESP32 through WebSockets using the interface below, which can set the center, size, and number of coordinates the machine uses to draw. The ESP32 then iterates through the array of coordinates, telling the steppers where to go using moveTo(). Although the drawing mechanism did indeed follow drawing coordinates, the image produced was an oval rather than circle. In addition, the oval appeared to have rigid borders. We had expected that the two axes probably wouldn't move the same amount for every step, so getting an ellipse instead of a circle made sense.  Below are the results of the initial test run.
+<div class="row">
+  <div class="col-10">
+    <img width="100%" src="interface.png">
+  </div>
+</div>
+<div class="center-colum">
+     <iframe width="400" height="225" src="https://www.youtube.com/embed/ziVIGtE3PIU?si=GzY5MmNCPPcxtbK9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+<br>
+The rough edges of the ellipse are a result of using too few steps to draw the circle. Whenever we tried to send more than ~80 coordinate pairs, the message from the client to the server just wouldn't go through for some reason. We theorized that we were running into some max buffer size in one of the libraries, which meant whatever signaled the end of the message didn't get received by the server.  To be able to send more coordinates, we truncated the coordinate values (which were originally floats) to ints before sending them, which allowed us to send over 140 coordinate pairs for smoother drawing. 
+<br>
+<br>
+After determining the stepper motors and code functions, we tried incorporting the limit switches into the circuit. However, when trying to do so, either the limit switches or the code for the limit switches caused the previous x-and-y-axes code to malfunction. Because we couldn't get our limit switches working, we ended up having to calibrate the origin by unplugging the machine from wall power so we could move the axes, having it run to (0, 0) using the "temporary 'calibrate'" button while it was disconnected, and pushing it by hand to where we wanted our origin to be so that its physical position aligned with the coordinates was at. 
+<br>
+<br>
+With our origin and basic motion functioning, we needed to calibrate the axes so that 50 steps in the x direction would physically move the same amount as 50 steps in the y direction instead of the x direction moving farther for every coordinate (which is what was producing an ellipse instead of a circle).  To determine the scaling factor, we measured the length of a straight line of the same length along each axis and divided them. We found that the y values needed to be scaled by 1.45 to get the same amount of movement. With that, we could finally draw a circle. Below are video demonstrations of the drawing mechanism working with a pen. Because it just sends coordinates, any drawing that is converted into coordinates can be drawn by the machine. To demonstrate that, we had it draw "PS70" (triggered by clicking the "draw some shape" button). Emma got the coordinates for the text from <a href="https://spotify.github.io/coordinator/">this cool site</a> which generates coordinates from svgs.
+<br>
+<iframe width="400" height="225" src="https://www.youtube.com/embed/0ke3tdJJ9k0?si=mU3fMpFe-Uv2znUZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="400" height="225" src="https://www.youtube.com/embed/aYotI7bsY5w?si=NeXwNhHKK9opNCJw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<br>
+<br>
+The final challenge was implementing the syringe and icing to the drawing mechanism. We encountered yet another issue with the syringe stepper motor whereby the motor wasn't driving the syringe pump. Therefore, we determined to manually press the syringe to extract the frosting. Here is the final product using the icing. 
+<div class="center-colum">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/XuRs6IfaU1A?si=MbARmw7e56Wx_3rd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+<div class="row">
+  <div class="col-10">
+    <img width="100%" src="frosted.JPG">
+  </div>
 </div>
 </xmp>
 </body>
