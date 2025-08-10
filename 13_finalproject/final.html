@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<title>Phys S-12: Intro to Digital Fabrication</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../style.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> 
+
+
+<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
+  <div style="align-items: center; justify-content: center;" class="container-fluid">
+    <div class="flexrow">
+      <h2 class="nav-title">Phys S-12 Summer 2025</h2>
+    </div>
+    <div class="navbar-nav">
+      <h4><a class="nav-link" href="../index.html">Home</a></h4>
+      <h4><a class="nav-link" href="../about.html">About</a></h4>
+    </div>
+  </div>
+</nav>
+
+<body>
+<xmp style="display:none;">
+<div class="textcontainer">
+<p class="margin">   </p>
+
+<div class="row">
+  <div class="col">
+    <h2>A drawing arm</h2>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col">
+    <p> 
+        I wanted to build a drawing machine with a drawing mechanism that looks and moves like a human's arm. I  was inspired by 18th century drawing automata, specifically the <a href="https://www.youtube.com/watch?v=Tv5U_fEvrMA">Maillardet automaton </a> and the <a href="https://www.youtube.com/watch?v=IeTOqDb-86s">Jaquet-Droz writer automaton</a>. Because of the our compressed timeline, I decided to focus on the most important element of the drawing machine, the arm itself. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/HeOtVXGGqTk?si=c5qYr6xR0nnKhhGn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <h3>Design</h3>
+    <p> 
+        Originally, I wanted a shoulder-like joint that would be able to rotate in several different directions. After several drafts and serious contemplation of my shoulder, however, I realized that was going to be too complex for me and needed to simplify. I settled on three degrees of freedom: rotation of the arm forward and backward at the top of the shoulder, which translates to y-axis movement on the drawing surface; rotation of arm left to right at what is visually the shoulder joint, which provides x-axis movement; and rotation of the elbow up and down, which both lifts the drawing implement off the surface and applies pressure to it. I wanted it to use a pencil, so I also needed a sensor under the drawing surface to ensure the end effector would apply enough pressure to actually produce lines.  
+    </p>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h4>Prototype</h4>
+        <p> 
+        For the <a href="https://eckay.github.io/phys_s-12/07_outputs/index.html">week 7 assignment</a>, I printed the rough shape of the arm and built my second attempt at a pressure sensor made from a variable resistance material called Velostat (more detail on that sensor's construction is on my <a href="https://eckay.github.io/phys_s-12/06_inputs/index.html">week 6</a> page). From that experience, I learned both that the Velostat sensor was going to be a challenge to calibrate and that my original plan to use microservos for all three joints would absolutely not work because they lacked enough torque to turn the y-axis shoulder joint well. I had wanted to use only servomotors because I thought being able to set the joints to specific (and mostly consistent) angles would make programming the arm's movement easier, but with that no longer an option I opted for a stepper motor for the shoulder instead. 
+        </p>
+    </div>
+    <div class="col-6 text-center">
+     <img height="400vh" src="../07_outputs/files/box_view.jpg">
+    </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>Redesign</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <img width="100%" src="files/arm_v1_gif.gif">
+  </div>
+  <div class="col-6">
+    <img width="100%" src="files/arm_v2_gif.gif">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        While redesigning the arm to work with a stepper motor, I modeled both the original twisting movement at the shoulder I had initially planned to use (left) and an alternative swinging motion (right). At that point in the semester, I realized that I was going to have to spend significantly more time getting the basic movement of the arm working than I had anticipated, so I would likely have to hardcode movements into the arm (which did end up happening). Because the swinging motion moves directly along the x-axis rather than in an arc like the twisting one does, it's easier to position directly by just sending angles to the servo. I wanted to see the arm able to draw <i>something</i>, so I ultimately decided to use the second type of motion.
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h3>Construction</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>Laser cut drawing surface and frame for arm (<a href="files/lasercut_base_and_frame_dxf.zip" download>download dxf files</a>)</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+
+        Materials:
+
+    <ul>
+        <li>
+            3mm plywood
+        </li>
+        <li>
+            6mm plywood
+        </li>
+        <li>
+            M3 screws, set screws, and wing nuts
+        </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-4">
+    <img width="100%" src="files/desk-1.jpg">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/desk-2.jpg">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/desk-3.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        The base of the drawing surface is built from lasercut plywood. It has a cutout in it where electronics and wires are intended to be stowed. I thought that I would be able to use a Hall effect sensor to calibrate the zero position for the stepper motor, so this was also made for that sensor to sit underneath. The bottom two layers use 6mm ply and the top two use 3mm, but that can be adjusted as needed. I used the drill press and tapped the holes, which hold together the bottom three layers with set screws. The top two layers are held together with normal M3 screws with wing nuts on them that tighten down the frame, which holds the Velostat/copper tape pressure sensor sandwich in place.  
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <img width="50%" src="files/arm-frame.jpg">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        The frame that the arm hangs from is held together with finger joints. It has lasercut holes in the top to attach the mounts that hold the wooden dowel of the shoulder. It snaps together with the rest of the base to for alignment.  
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>3D printed arm parts and stepper mount (<a href="files/arm_v2_fusion_archive.f3z.zip" download>download Fusion archive</a>)</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <ul>
+        <li>
+            Hand (<a href="files/hand.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Forearm (<a href="files/forearm.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Upper arm (<a href="files/upper_arm.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Upper arm bracket (<a href="files/upper_arm_bracket.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Shoulder servo mount (<a href="files/shoulder_servo_mount.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Dowel pulley (<a href="files/dowel-pulley.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Dowel mount (<a href="files/dowel_mount.f3d" download>download f3d</a>)
+        </li>
+        <li>
+            Stepper bracket (<a href="files/stepper_bracket.stl" download>download stl</a>)
+        </li>
+        <li>
+            Stepper mount (<a href="files/stepper_mount.stl" download>download stl</a>)
+        </li>
+        <li>
+            plus a timing belt clip from <a href="https://pinshape.com/items/18841-3d-printed-better-belt-clip">a user on Pinshape</a>
+        </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col-4">
+    <img width="100%" src="files/arm-full.jpg">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/hands.jpg">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/stepper_mount.JPG">
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col-4">
+    <img width="100%" src="files/ hand-detail.JPG">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/shoulder_detail.JPG">
+  </div>
+  <div class="col-4">
+    <img width="100%" src="files/elbow_detail.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        The moving parts of the arm (apart from motors, timing belt, and the wooden dowel) are all 3D printed and held together by M3 and M2 hardware. The photos show details of each joint, and the Fusion archive is available for download to look at the full 3D model with the components assembled. The hand is an edited version of my 3D scanning assignment from <a href="../05_3Ddesign/index.html">week 5</a>.
+    </p>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <h4>Sensors</h4>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+
+        Materials:
+
+    <ul>
+        <li>
+            GY-271 magnetic field sensor (QMC5883L chip)
+        </li>
+        <li>
+            Conductive tape
+        </li>
+        <li>
+            Sheet of velostat
+        </li>
+        <li>
+            1k ohm resistor
+        </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col-6">
+    <img width="100%" src="files/compass_sensor.JPG">
+  </div>
+  <div class="col-6">
+    <img width="100%" src="files/velostat_sensor.JPG">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+The arm and frame have two sensors for input, a GY-271 3-axis magnetic field sensor and a pressure sensor I made by sandwiching a sheet of Velostat between two sheets of conductive tape. The pressure sensor sits under the drawing surface and is connected to an analog pin on the microcontroller through a voltage divider with a 1k ohm resistor. The Velostat sensor is not currently integrated with the movement of the arm because I ran out of time to calibrate it. It does read progressively increased values when I press harder on the drawing surface, but the baseline reading (nothing on the sensor) varies by about 1000 with no clear reason. A larger resistor might make the signal more useable.
+    </p>
+    <p>
+        The GY-271 is a replacement for a Hall effect sensor. I wanted to use a Hall effect sensor to zero the stepper motor by placing the sensor under the drawing surface and a magnet in the arm. When the sensor read low, indicating a magnet, the stepper position would be set to zero. Unfortunately, the Hall effect sensors in the lab didn’t have enough range to detect the small magnets at a distance of about 1.5 cm. With more time, I would remake the shoulder mount and the frame above it so the Hall effect sensor sits in the frame and the magnet sits on top of the shoulder where they would be nearly touching when the arm is at its zero position. 
+    </p>
+    <p>
+The GY-271 is a magnetic field sensor that is mostly advertised as a compass. It uses I2C to communicate with the microcontroller and detects changes in magnetic fields along x-, y-, and z-axes. To calibrate the stepper motor, I only needed a single axis (whichever changed the most when moving the arm back and forwards for calibration). The GY-271 (with QMC5883L chip) has the sensitivity to detect the magnet and also has a great library that makes it easy to use, <a href="https://github.com/mprograms/QMC5883LCompass">QMC5883L Compass</a>. Unfortunately, even using the library’s smoothing, it is too sensitive to local changes in its environment to calibrate consistently. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>Motors</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+
+    Materials:
+
+    <ul>
+        <li>
+            NEMA-17 stepper motor
+        </li>
+        <li>
+            A4988 stepper motor driver
+        </li>
+        <li>
+            100 microfarad capacitor 
+        </li>
+        <li>
+            timing belt
+        </li>
+        <li>
+            timing belt pulley
+        </li>
+        <li>
+            2 9g microservos, with horns and screws
+        </li>
+        <li>
+            12V DC adapter
+        </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom: 2vh;">
+  <div class="col-6">
+    <img width="100%" src="files/stepper_in_mount.JPG">
+  </div>
+  <div class="col-6">
+    <img width="100%" src="files/servos_in_mount.jpg">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+The NEMA-17 stepper motor (left) is attached to a timing belt that rotates the shoulder dowel back and forth for y-axis motion. The microservos (right) provide x- and z-axis motion. The stepper works well, aside from the belt occasionally slipping at the far ends of the arms range of motion. That issue could be fixed by attaching the motor to the base more firmly. The microservos (pictured in the previous version of the arm where they’re easier to see) struggle to provide enough torque to move the arm smoothly. When they move slowly, step by step, it looks stiff and they lack force, so I had to move them to their new positions all at once. As a result, the arm's movement looks somewhat abrupt. The stepper motor is powered using a 12V DC adapter, and the servos are powered through 5V board power. I soldered some wires onto a 5V wall power DC adapter as an external power source for the servos, but they didn't run better off it so I didn't actually use it. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h4>Microcontroller programming</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        The arm is controlled with an ESP32 Devkit V1. I use the AccelStepper library for the stepper, ESP32Servo for the microservos, and QMC5883LCompass for the magnetic field sensor. Because I ended up hardcoding the movement to draw the rectangle, there’s no WebSockets interface to pass it coordinates, which was my original plan. What happens in the main loop is determined by the integer varible "phase", which is initialized to 0 (calibration). When the program starts, the arm starts the stepper motor calibration phase. The stepper motor is set to make 200 steps per revolution, with a speed of 100 steps per second and an acceleration of 50 steps per second squared. It moves forward and backward until it hits a value from the magnetic sensor signaling the zero position:   
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+int stepperCalibration() {
+  if (stepperY.distanceToGo() == 0) {
+    Serial.println("calibrating!");
+
+    // Read compass
+    compass.read();
+    int y = compass.getY(); // can be whichever axis works best
+
+    // Checks to make sure the stepper is still in the calibration range. If so, exits calibration
+    if (prev_y_valid) {
+      if (y >= y_low && y <= y_high ) {
+        stepperY.setCurrentPosition(0);
+        phase = 1;
+        return 1; // exit calibration
+      }  
+    }
+
+    // These run if not previously in range or if has moved out of range
+    if (y >= y_low && y <= y_high ) { // in range
+      prev_y_valid = true;
+      stepperY.stop();
+    } 
+    else if (y < y_min) {
+      prev_y_valid = false;
+      stepperY.move(stepper_move_val); // move backwards (towards frame)
+    } 
+    else if (y > y_max) {
+      prev_y_valid = false;
+      stepperY.move(-stepper_move_val); // move forwards
+    }
+  }
+  return 0; // keep calibrating
+}
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        The ranges from the magnetic field sensor are inconsistent depending on the location of the arm, so they have to be respecified by looking at the GY-271 sensor output for good calibration. Every loop of loop() calls stepperY.run() or stepperY.runToPosition() if it needs to be blocking. While phase == 0, stepperCalibration() gets called in loop() repeatedly. While phase == 1, the baseline timer gets set. While in phase == 2, the arm draws.
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+void loop() {
+  current_ms = millis();
+
+  if (phase == 0) {
+    phase = stepperCalibration();
+  } 
+  else if (phase == 1) {
+    Serial.println("ready to draw!");
+    stepperY.stop();
+    prev_ms = millis();
+    phase = 2;
+  } 
+  else if (phase == 2) {
+    current_ms = millis();
+    if (current_ms - prev_ms >= interval_ms && stepperY.distanceToGo() == 0) {
+      hardcodeRectangle();
+    }  
+  }
+  else if (phase == 3) {
+    stepperY.stop();
+  }
+  
+  if (phase == 2) {
+    stepperY.runToPosition();
+  }
+  else {
+    stepperY.run();
+  }
+}
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+        hardcodeRectangle() iterates through an array of preset servo angles and steps that I more-or-less guess and checked by hand to draw a rectangle. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+void hardcodeRectangle() {
+  if (servo_index < arr_length) {
+        servoX.Write(x_coords[servo_index]);
+        servoZ.Write(z_coords[servo_index]);;
+        stepperY.moveTo(step_coords[servo_index]);
+        servo_index++;
+      }
+      else if (servo_index == arr_length) {
+        phase == 3;
+  }
+}
+    </code></pre>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>
+    The Write() method of the Servo class is just the standard write() from the servo library. As mentioned earlier, it used to incrementally move from angle to angle, but I couldn't get it to draw well. 
+    </p>
+    <p>
+        I also have this totally unimplemented draft of code for the unused Velostat sensor. I planned to call it every n ticks of the servo, with n yet to be determined, but the servos did not move well when moving incrementally, so this will have to be revised. 
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <pre><code>
+/** Globals **/
+int velo_min = 1500; // determined by looking at values 
+int velo_max = 2400;
+int velo_val;
+/** Function **/
+void velostat() {
+    velo_val = analogRead(velo_pin);
+    if (velo_val < velo_min) {
+    servoZ.increase();
+    }
+    else if (velo_val > velo_max) {
+    servoZ.decrease();
+    }
+} 
+    </code></pre>
+  </div>
+</div>
+
+
+
+</div>
+</xmp>
+</body>
+
+<script src="../strapdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+
+</html>
